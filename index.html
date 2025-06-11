@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Gallery</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="theme-light">
+  <div class="container">
+    <h1>Create Your Image Gallery</h1>
+    <form action="{{ url_for('generate') }}" method="POST" enctype="multipart/form-data">
+      <label>Select Images:</label>
+      <input type="file" name="images" multiple accept=".jpg,.jpeg,.png" required><br><br>
+
+      <label>Gallery Title:</label>
+      <input type="text" name="title" placeholder="Enter a title" required><br><br>
+
+      <label>Short Description (optional):</label>
+      <textarea name="description" rows="3" placeholder="Enter some info..."></textarea><br><br>
+
+      <label>Choose Theme:</label>
+      <select name="theme">
+        <option value="theme-light">Light</option>
+        <option value="theme-dark">Dark</option>
+        <option value="theme-sky">Sky</option>
+      </select><br><br>
+
+      <button type="submit">Generate Gallery</button>
+    </form>
+  </div>
+</body>
+</html>

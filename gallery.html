@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="{{ theme }}">
+  <header>
+    <h1>{{ title }}</h1>
+    {% if description %}
+      <p class="description">{{ description }}</p>
+    {% endif %}
+  </header>
+
+  <div id="gallery">
+    {% for img in images %}
+      <img src="{{ url_for('uploaded_file', filename=img) }}" alt="Image">
+    {% endfor %}
+  </div>
+
+  <footer>
+    <p>© 2025 Sneha Mandal | Contact: sneha@example.com</p>
+  </footer>
+</body>
+</html>
