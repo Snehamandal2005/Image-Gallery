@@ -1,12 +1,14 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request
 import os
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-UPLOAD_FOLDER = 'uploads'
+
+# ✅ Uploads go inside static/uploads/
+UPLOAD_FOLDER = os.path.join('static', 'uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Ensure upload folder exists
+# Ensure folder exists
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 @app.route('/')
@@ -15,7 +17,7 @@ def index():
 
 @app.route('/generate', methods=['POST'])
 def generate():
-    # Clear previous uploads (optional)
+    # Optional: clear previous uploads
     for f in os.listdir(UPLOAD_FOLDER):
         os.remove(os.path.join(UPLOAD_FOLDER, f))
 
@@ -26,10 +28,10 @@ def generate():
 
     image_filenames = []
     for file in uploaded_files:
-        if file.filename.endswith(('.jpg', '.jpeg', '.png')):
+        if file.filename.lower().endswith(('.jpg', '.jpeg', '.png')):
             filename = secure_filename(file.filename)
-            path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(path)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
             image_filenames.append(filename)
 
     return render_template('gallery.html',
@@ -37,10 +39,6 @@ def generate():
                            theme=theme,
                            description=description,
                            images=image_filenames)
-
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return app.send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 if __name__ == '__main__':
     app.run(debug=True)
